@@ -1,9 +1,9 @@
 <?php
-$user='japahard@gmail.com';
-$password='hcorrea123';
-$remetente='japahard@gmail.com';
-$resposta='japahard@gmail.com';
-$destinatario='henriquehcl@hotmail.com';
+$user='email@gmail.com';
+$password='******';
+$remetente='email@gmail.com';
+$resposta='email@gmail.com';
+$destinatario='email@email.com';
 $assunto='Teste com variavel';
 $mensagem='conteudo.html';
 
