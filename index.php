@@ -1,95 +1,78 @@
 <?php
-/**
- * This example shows settings to use when sending via Google's Gmail servers.
- * This uses traditional id & password authentication - look at the gmail_xoauth.phps
- * example to see how to use XOAUTH2.
- * The IMAP section shows how to save this message to the 'Sent Mail' folder using IMAP commands.
- */
+$user='japahard@gmail.com';
+$password='hcorrea123';
+$remetente='japahard@gmail.com';
+$resposta='japahard@gmail.com';
+$destinatario='henriquehcl@hotmail.com';
+$assunto='Teste com variavel';
+$mensagem='conteudo.html';
 
-//Import PHPMailer classes into the global namespace
+//classes usadas no PHPmailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require './vendor/autoload.php';
+require 'vendor/autoload.php';
 
-//Create a new PHPMailer instance
 $mail = new PHPMailer;
 
-//Tell PHPMailer to use SMTP
 $mail->isSMTP();
 
 //Enable SMTP debugging
 // SMTP::DEBUG_OFF = off (for production use)
 // SMTP::DEBUG_CLIENT = client messages
 // SMTP::DEBUG_SERVER = client and server messages
-$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+//$mail->SMTPDebug = SMTP::DEBUG_OFF;
 
-//Set the hostname of the mail server
+//configurando o host de envio de e-mail
 $mail->Host = 'smtp.gmail.com';
-// use
- //$mail->Host = gethostbyname('smtp.gmail.com');
-// if your network does not support SMTP over IPv6
 
-//Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+//configurando a porta de saida de e-mail
 $mail->Port = 587;
 
-//Set the encryption mechanism to use - STARTTLS or SMTPS
+//tipo de encriptação do e-mail
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 
-//Whether to use SMTP authentication
+//autenticação do SMTP
 $mail->SMTPAuth = true;
 
-//Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = 'email@gmail.com';
+//Seu login do Gmail
+$mail->Username = $user;
 
-//Password to use for SMTP authentication
-$mail->Password = '******';
+//Sua senha do Gmail
+$mail->Password = $password;
 
-//Set who the message is to be sent from
-$mail->setFrom('email@gmail.com', 'First Last');
+//E-mail e nome do remetente que vai aparecer no corpo de email
+$mail->setFrom($remetente, 'Seu Nome');
 
-//Set an alternative reply-to address
-$mail->addReplyTo('email@gmail.com', 'First Last');
+//E-mail para receber a resposta
+$mail->addReplyTo($resposta, 'Seu Nome');
 
-//Set who the message is to be sent to
-$mail->addAddress('email@gmail.com', 'John Doe');
+//destinatario do e-mail
+$mail->addAddress($destinatario, 'Nome quem recebe o email');
 
-//Set the subject line
-$mail->Subject = 'PHPMailer GMail SMTP test';
+//Assunto do e-mail
+$mail->Subject = $assunto;
 
-//Read an HTML message body from an external file, convert referenced images to embedded,
-//convert HTML into a basic plain-text alternative body
-$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
+//corpo da menssagem, pode ser um arquivo em HTML, imagem, etc...
+$mail->msgHTML(file_get_contents($mensagem), __DIR__);
 
-//Replace the plain text body with one created manually
-$mail->AltBody = 'This is a plain-text message body';
 
-//Attach an image file
-//$mail->addAttachment('images/phpmailer_mini.png');
 
-//send the message, check for errors
+//Verificando se o e-mail foi enviado sem erros
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Encontramos problemas!: '. $mail->ErrorInfo;
 } else {
-    echo 'Message sent!';
-    //Section 2: IMAP
-    //Uncomment these to save your message in the 'Sent Mail' folder.
-    #if (save_mail($mail)) {
-    #    echo "Message saved!";
-    #}
+    echo 'Mensagem enviada!';
+
 }
 
-//Section 2: IMAP
-//IMAP commands requires the PHP IMAP Extension, found at: https://php.net/manual/en/imap.setup.php
-//Function to call which uses the PHP imap_*() functions to save messages: https://php.net/manual/en/book.imap.php
-//You can use imap_getmailboxes($imapStream, '/imap/ssl', '*' ) to get a list of available folders or labels, this can
-//be useful if you are trying to get this working on a non-Gmail IMAP server.
+
 function save_mail($mail)
 {
-    //You can change 'Sent Mail' to any other folder or tag
+    
     $path = '{imap.gmail.com:993/imap/ssl}[Gmail]/Sent Mail';
 
-    //Tell your server to open an IMAP connection using the same username and password as you used for SMTP
+    
     $imapStream = imap_open($path, $mail->Username, $mail->Password);
 
     $result = imap_append($imapStream, $path, $mail->getSentMIMEMessage());
@@ -97,3 +80,4 @@ function save_mail($mail)
 
     return $result;
 }
+?>
