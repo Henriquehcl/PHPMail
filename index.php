@@ -1,6 +1,6 @@
 <?php
 $user='email@gmail.com';
-$password='******';
+$password='*********';
 $remetente='email@gmail.com';
 $resposta='email@gmail.com';
 $destinatario='email@email.com';
