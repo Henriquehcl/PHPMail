@@ -54,7 +54,7 @@ $mail->addAddress($destinatario, 'Nome quem recebe o email');
 $mail->Subject = $assunto;
 
 //corpo da menssagem, pode ser um arquivo em HTML, imagem, etc...
-$mail->msgHTML(file_get_contents($mensagem), __DIR__);
+$mail->msgHTML(utf8_decode(file_get_contents($mensagem)), __DIR__);
 
 
 
